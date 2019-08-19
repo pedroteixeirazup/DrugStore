@@ -1,6 +1,8 @@
 import React from 'react';
 import AliceCarousel from 'react-alice-carousel';
-import './style.css'
+import './style.css';
+
+import Filter from '../Filter';
 
 class Main extends React.Component {
 
@@ -28,7 +30,10 @@ class Main extends React.Component {
     };
 
     return (
+      <>
+       <Filter/>
         <div className="main-container">
+
             <AliceCarousel
             duration={400}
             autoPlay={false}
@@ -52,6 +57,34 @@ class Main extends React.Component {
                 <div className="yours-custom-class"><h2>5</h2></div>
         </AliceCarousel>
         </div>
+
+         <div className="main-container2">
+            <h1>Desconto</h1>
+            <AliceCarousel
+            duration={400}
+            autoPlay={false}
+            startIndex = {1}
+            fadeOutAnimation={true}
+            mouseDragEnabled={true}
+            playButtonEnabled={false}
+            responsive={responsive}
+            autoPlayInterval={2000}
+            autoPlayDirection="rtl"
+            autoPlayActionDisabled={false}
+            onSlideChange={this.onSlideChange}
+            onSlideChanged={this.onSlideChanged}
+            buttonsDisabled={true}
+            dotsDisabled={true}
+        >
+                <div className="yours-custom-class"><h2>1</h2></div>
+                <div className="yours-custom-class"><h2>2</h2></div>
+                <div className="yours-custom-class"><h2>3</h2></div>
+                <div className="yours-custom-class"><h2>4</h2></div>
+                <div className="yours-custom-class"><h2>5</h2></div>
+        </AliceCarousel>
+        </div>
+
+        </>
       
     );
   }
