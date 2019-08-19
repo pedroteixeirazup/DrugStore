@@ -2,9 +2,13 @@ import React, { useState } from 'react';
 
 import logo from '../../assets/drug_store.png';
 
+import api from '../../services/api';
+
+import { Link } from 'react-router-dom';
+
 import './style.css';
 
-export default function Register() {
+export default function Register({history}) {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -13,14 +17,35 @@ export default function Register() {
     const [userTerms, setUserTerms] = useState(false);
 
    /*Criar on Submit*/
+   async function handleSubmit(e) {
+       e.preventDefault();
+
+       const response = await api.post('/register', {
+           name: name,
+           username: username,
+           email: email,
+           password: password,
+           confirm: confirm
+       });
+
+       console.log(response.data)
+       const { _id } = response.data;
+
+       history.push(`/dev/${ _id }`);
+
+       console.log(history);
+   }
 
     return (
         <div className="register-container">
-            <form >
-                <img
-                    src={logo} 
-                    alt="Drug Store"
-                />
+            <form onSubmit={handleSubmit} >
+                <Link to="/">
+                    <img
+                        src={logo} 
+                        alt="Drug Store"
+                    />
+                </Link>
+
                 <p>Bem vindo ao cadastro da Drug Store, complete os campos a seguir!</p>
                 <input 
                     placeholder="Digite seu melhor e-mail"
@@ -41,12 +66,14 @@ export default function Register() {
                     onChange={e => setName(e.target.value)}
                 />
                 <input 
+                    type="password"
                     placeholder="Digite sua senha"
                     alt="Password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                 />
                 <input 
+                    type="password"
                     placeholder="Confirme sua senha"
                     alt="Confirm Password"
                     value={confirm}
