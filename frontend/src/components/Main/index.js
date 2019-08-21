@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import AliceCarousel from 'react-alice-carousel';
 import './style.css';
 
 import Filter from '../Filter';
 
-class Main extends React.Component {
+class Main extends Component {
 
   onSlideChange(e) {
     console.log('Item`s position during a change: ', e.item);
@@ -32,8 +32,9 @@ class Main extends React.Component {
     return (
       <>
        <Filter/>
-        <div className="main-container">
 
+        <div className="main-container">
+            <h2>Merchan</h2>
             <AliceCarousel
             duration={400}
             autoPlay={false}
@@ -58,8 +59,8 @@ class Main extends React.Component {
         </AliceCarousel>
         </div>
 
-         <div className="main-container2">
-            <h1>Desconto</h1>
+         <div className="descount-container">
+            <h2>Desconto</h2>
             <AliceCarousel
             duration={400}
             autoPlay={false}
@@ -81,7 +82,40 @@ class Main extends React.Component {
                 <div className="yours-custom-class"><h2>3</h2></div>
                 <div className="yours-custom-class"><h2>4</h2></div>
                 <div className="yours-custom-class"><h2>5</h2></div>
+                <div className="yours-custom-class"><h2>6</h2></div>
+                <div className="yours-custom-class"><h2>7</h2></div>
+                <div className="yours-custom-class"><h2>8</h2></div>
+
         </AliceCarousel>
+        </div>
+
+        <div className="category-container">
+        <h2>Categorias</h2>
+           <ul>
+             <li>1</li>
+             <li>2</li>
+             <li>3</li>
+             <li>4</li>
+             <li>5</li>
+           </ul>
+
+        </div>
+
+
+        <div className="mostwanted-container">
+          <h2>Mais pedidos</h2>
+          <div>1</div>
+          <div>2</div>
+          <div>3</div>
+          <div>4</div>
+          <div>5</div>
+          <div>6</div>
+          <div>7</div>
+          <div>8</div>
+          <div>9</div>
+          <div>9</div>
+          <div>9</div>
+          <div>9</div>
         </div>
 
         </>
