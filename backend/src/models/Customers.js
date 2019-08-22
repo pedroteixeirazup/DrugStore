@@ -17,6 +17,7 @@ const CustomerSchema = new Schema({
     password: {
         type: String,
         required: true,
+        select: false
     }
 }, {
     timestamps: true,
