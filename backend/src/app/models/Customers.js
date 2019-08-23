@@ -18,6 +18,14 @@ const CustomerSchema = new Schema({
         type: String,
         required: true,
         select: false
+    },
+    passwordResetToken: {
+        type: String,
+        select: false,
+    },
+    passwordResetExpiress: {
+        type: Date,
+        select: false,
     }
 }, {
     timestamps: true,

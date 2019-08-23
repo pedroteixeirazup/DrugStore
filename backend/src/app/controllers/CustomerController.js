@@ -1,7 +1,9 @@
 const Customer = require('../models/Customers');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const authConfig = require('../config/auth');
+const crypto = require('crypto');
+const authConfig = require('../../config/auth');
+const mailer = require('../../modules/mailer');
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -12,6 +14,74 @@ function generateToken(params = {}){
 }
 
 module.exports = {
+
+    async forgot(req, res) {
+        const { email } = req.body;
+
+        try {
+            const user = await Customer.findOne({ email });
+
+            if (!user) 
+                return res.status(400).send({ error: 'user not found' });
+            
+            const token = crypto.randomBytes(20).toString('hex');
+
+            const now = new Date();
+            now.setHours(now.getHours() + 1);
+
+            await Customer.updateOne({_id: user._id}, {
+                '$set': {
+                    passwordResetToken: token,
+                    passwordResetExpiress: now,
+                }
+            });
+
+            mailer.sendMail({
+                to: email,
+                from: 'diego@rocketseat.com.br',
+                template: 'auth/forgot_password',
+                context: { token }
+            }, (err) => {
+                if (err) 
+                    return res.status(400).send({ error: 'cannot send forgot password email' })
+
+               return res.send();
+            })
+
+        } catch (err) {
+            console.log(err);
+            res.status(400).send({ error: 'error on forgot password, try again' });
+        }
+
+    },
+
+    async reset_password(req, res) {
+        const { email, token, password } = req.body;
+        const hash = bcrypt.hashSync(password, salt);
+        try {
+            const user = await Customer.findOne({ email })
+            .select('+passwordResetToken passwordResetExpiress');
+
+            if (!user) 
+                return res.status(400).send({ error: 'user not found' });
+
+            if (token !== user.passwordResetToken)
+                return res.status(400).send({ error: 'token invalid' });
+
+            const now = new Date();
+
+            if (now > user.passwordResetExpiress)
+                return res.status(400).send({ error: 'token expired, generate a new one' });
+
+            user.password = hash;
+
+            await user.save();
+
+            res.send();
+        } catch (err) {
+            res.status(400).send({ error: 'cannot reset password, try again' });
+        }
+    },
 
     async login(req, res) {
         const { email, password } = req.body;
